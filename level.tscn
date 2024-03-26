@@ -1,0 +1,64 @@
+[gd_scene load_steps=9 format=3 uid="uid://c08sroxax81pv"]
+
+[ext_resource type="PackedScene" uid="uid://cli6lfelx3tnn" path="res://player.tscn" id="1_pt7wf"]
+[ext_resource type="PackedScene" uid="uid://cgkyx8yptwsv3" path="res://coin.tscn" id="2_ontke"]
+[ext_resource type="Material" uid="uid://cgo2vk7gwa0hg" path="res://new_standard_material_3d.tres" id="3_8ccon"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sxn3n"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_4jqj0"]
+sky_material = SubResource("ProceduralSkyMaterial_sxn3n")
+
+[sub_resource type="Environment" id="Environment_krrl7"]
+background_mode = 2
+sky = SubResource("Sky_4jqj0")
+tonemap_mode = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qm585"]
+size = Vector2(10, 10)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_wvj1s"]
+data = PackedVector3Array(5, 0, 5, -5, 0, 5, 5, 0, -5, -5, 0, 5, -5, 0, -5, 5, 0, -5)
+
+[node name="Plane" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_krrl7")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.8465, 0, 0, 0, 1, 0, 0, 0, 1.86727, 0, 0, 0)
+mesh = SubResource("PlaneMesh_qm585")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_wvj1s")
+
+[node name="Player" parent="." instance=ExtResource("1_pt7wf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.920748, 0.939485, -2.67592)
+top_level = true
+linear_damp = 3.0
+
+[node name="Coin" parent="." instance=ExtResource("2_ontke")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.98502, 3.43125, 5.49345)
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16094, 5.77317)
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0618114, 0.0729463, 0.782048)
+size = Vector3(18.3407, 2.52393, 6.03857)
+material = ExtResource("3_8ccon")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(0.989609, 0.112926, -0.0890073, -0.0234098, 0.737303, 0.675156, 0.141868, -0.666057, 0.732285, 1.37149, 0.61152, -2.98362)
+operation = 2
+size = Vector3(7.06978, 3.9585, 7.14478)
+material = ExtResource("3_8ccon")
